@@ -1,5 +1,6 @@
 var express = require("express");
 var router = express.Router();
+var hiddenKey = require("./key");
 
 const users = [];
 
@@ -22,8 +23,10 @@ router.get("/", function(req, res, next) {
 });
 
 router.post("/score", function(req, res, next) {
-  const { score, userName } = req.body;
-  users.push({ score: Number(score), userName });
+  const { key, score, userName } = req.body;
+  if (key === hiddenKey && score < 400) {
+    users.push({ score: Number(score), userName });
+  }
   res.send({ success: true });
 });
 
